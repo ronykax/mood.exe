@@ -77,7 +77,7 @@ export default function App() {
                     >
                         <img className="w-full h-full" src={src} alt="Mood" />
 
-                        <div className="animated-border absolute w-full h-full top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/0 group-hover:bg-black/50 flex items-center justify-center backdrop-blur-xs">
+                        <div className="border-[16px] border-white/25 absolute w-full h-full top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/0 group-hover:bg-black/65 flex items-center justify-center backdrop-blur-[10px]">
                             <span className="text-2xl font-semibold text-white">
                                 {src.split("/").pop()?.slice(0, -7)}
                             </span>
