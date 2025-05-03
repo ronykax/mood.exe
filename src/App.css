@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 @laye base {
-    @import url(https://fonts.googleapis.com/css?family=Comic+Neue:300,300italic,regular,italic,700,700italic);
+    @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 }
 
 body {
-    font-family: "Comic Neue", cursive;
+    font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
     @apply text-white;
