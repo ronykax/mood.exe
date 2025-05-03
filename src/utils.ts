@@ -1,5 +1,5 @@
 export function getMoodImages(): string[] {
-    const moods = ["crying", "frown", "neutral", "happy"] as const;
+    const moods = ["stressed", "sad", "calm", "happy"] as const;
     const assets = import.meta.glob("/src/assets/moods/*.{png,gif}", {
         eager: true,
         import: "default",
