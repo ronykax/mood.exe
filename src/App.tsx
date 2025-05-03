@@ -14,6 +14,14 @@ export default function App() {
     const [pumpNotifications, shouldPumpNotifications] = useState(false);
 
     useEffect(() => {
+        async function shortcuts() {
+            window.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") {
+                    showModal && setShowModal(false);
+                }
+            });
+        }
+
         async function trayIcon() {
             await TrayIcon.new({
                 tooltip: "hi world!",
@@ -37,6 +45,7 @@ export default function App() {
 
         notifications();
         trayIcon();
+        shortcuts();
     }, []);
 
     useEffect(() => {
@@ -78,7 +87,7 @@ export default function App() {
             </div>
 
             {showModal && (
-                <Modal onBackgroundClick={() => setShowModal(false)} />
+                <Modal />
             )}
         </div>
     );
