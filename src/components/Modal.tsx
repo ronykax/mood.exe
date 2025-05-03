@@ -22,12 +22,13 @@ export default function Modal() {
                 <textarea
                     ref={textareaRef}
                     onKeyDown={handleKeyDown}
-                    className="w-full h-full bg-white/10 rounded-md resize-none p-4 text-xl"
-                    placeholder="spill the tea if you must"
+                    className="w-full h-full bg-white/10 rounded-md resize-none p-4 text-xl placeholder:italic"
+                    placeholder="dump anything here..."
                 />
 
                 <div className="opacity-75 font-extralight text-xs flex justify-between w-full">
                     <span>
+                        📅{" "}
                         {new Date().toLocaleDateString("en-US", {
                             year: "numeric",
                             month: "long",
