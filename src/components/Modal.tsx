@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
+import { addMoodEntry } from "../utils";
 
-export default function Modal() {
+export default function Modal({ mood }: { mood: string }) {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
@@ -12,9 +13,20 @@ export default function Modal() {
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
-            console.log("Submitted:", textareaRef.current?.value);
+
+            const value = textareaRef.current?.value;
+
+            value && saveEntry(value);
         }
     };
+
+    async function saveEntry(value: string) {
+        await addMoodEntry({
+            entry: value,
+            createdAt: new Date().toISOString(),
+            mood: mood,
+        });
+    }
 
     return (
         <div className="w-full h-full bg-black/75 fixed top-0 right-0 backdrop-blur-xl">

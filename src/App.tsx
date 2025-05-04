@@ -1,64 +1,41 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
-import {
-    isPermissionGranted,
-    requestPermission,
-} from "@tauri-apps/plugin-notification";
-
 import { TrayIcon } from "@tauri-apps/api/tray";
 import Modal from "./components/Modal";
 import { getMoodImages } from "./utils";
+import { Menu } from "@tauri-apps/api/menu";
 
 export default function App() {
-    const [pumpNotifications, shouldPumpNotifications] = useState(false);
+    window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            showModal && setShowModal(false);
+        }
+    });
 
     useEffect(() => {
-        async function shortcuts() {
-            window.addEventListener("keydown", (e) => {
-                if (e.key === "Escape") {
-                    showModal && setShowModal(false);
-                }
-            });
-        }
-
         async function trayIcon() {
             await TrayIcon.new({
-                tooltip: "hi world!",
+                tooltip: "mood.exe",
                 title: "Hello, world!",
+                menu: await Menu.new({
+                    items: [
+                        { id: "quit", text: "Quit" },
+                        { id: "settings", text: "Settings" },
+                    ],
+                }),
+                showMenuOnLeftClick: true,
             });
         }
 
-        async function notifications() {
-            const granted = await isPermissionGranted();
-
-            if (granted) {
-                shouldPumpNotifications(true);
-            } else {
-                const req = await requestPermission();
-
-                if (req === "granted") {
-                    shouldPumpNotifications(true);
-                }
-            }
-        }
-
-        notifications();
         trayIcon();
-        shortcuts();
     }, []);
 
-    useEffect(() => {
-        // setInterval(async () => {
-        // }, 5000);
-        // if (pumpNotifications) {
-        //     sendNotification({ title: "mood.exe", body: "hi world!" });
-        // }
-    }, [pumpNotifications]);
-
+    const [currentMood, setCurrentMood] = useState<string>();
     const [showModal, setShowModal] = useState(false);
 
-    function handleClick() {
+    function handleClick(mood: string) {
+        setCurrentMood(mood);
         setShowModal(true);
     }
 
@@ -72,7 +49,9 @@ export default function App() {
                 {moods.map((src, i) => (
                     <button
                         key={i}
-                        onClick={handleClick}
+                        onClick={() =>
+                            handleClick(src.split("/").pop()?.slice(0, -7)!)
+                        }
                         className={`cursor-pointer relative group`}
                     >
                         <img className="w-full h-full" src={src} alt="Mood" />
@@ -86,9 +65,7 @@ export default function App() {
                 ))}
             </div>
 
-            {showModal && (
-                <Modal />
-            )}
+            {showModal && <Modal mood={currentMood!} />}
         </div>
     );
 }
