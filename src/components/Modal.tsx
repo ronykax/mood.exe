@@ -15,7 +15,6 @@ export default function Modal({ mood }: { mood: string }) {
             e.preventDefault();
 
             const value = textareaRef.current?.value;
-
             value && saveEntry(value);
         }
     };
@@ -28,6 +27,21 @@ export default function Modal({ mood }: { mood: string }) {
         });
     }
 
+    function getPlaceholder(): string {
+        switch (mood) {
+            case "calm":
+                return "what's up?";
+            case "happy":
+                return "spill the tea :D";
+            case "sad":
+                return "what happened? :(";
+            case "stressed":
+                return "you're not alone ;-;";
+            default:
+                return "";
+        }
+    }
+
     return (
         <div className="w-full h-full bg-black/75 fixed top-0 right-0 backdrop-blur-xl">
             <div className="flex flex-col h-full p-4 gap-4 items-center">
@@ -35,7 +49,7 @@ export default function Modal({ mood }: { mood: string }) {
                     ref={textareaRef}
                     onKeyDown={handleKeyDown}
                     className="w-full h-full bg-white/10 rounded-md resize-none p-4 text-xl placeholder:italic"
-                    placeholder="dump anything here..."
+                    placeholder={getPlaceholder()}
                 />
 
                 <div className="opacity-75 font-extralight text-xs flex justify-between w-full">

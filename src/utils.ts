@@ -1,11 +1,5 @@
-import {
-    BaseDirectory,
-    create,
-    exists,
-    open,
-    readTextFile,
-    writeTextFile,
-} from "@tauri-apps/plugin-fs";
+import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
+import { BaseDirectory, create, exists, open } from "@tauri-apps/plugin-fs";
 
 export function getMoodImages(): string[] {
     const moods = ["stressed", "sad", "calm", "happy"] as const;
@@ -43,6 +37,7 @@ export async function getThatJsonFile() {
         const newFile = await create(relativePath, {
             baseDir: BaseDirectory.Document,
         });
+
         await newFile.write(new TextEncoder().encode("[]")); // empty JSON array
         await newFile.close();
     }
@@ -61,29 +56,27 @@ export async function addMoodEntry(entry: {
     mood: string;
     entry: string;
 }) {
-    const filePath = "mood-exe\\data.json";
+    // let data: any[] = [];
 
-    let data: any[] = [];
+    const file = await getThatJsonFile();
 
-    const fileExists = await exists(filePath, {
-        baseDir: BaseDirectory.Document,
-    });
+    file.write(new TextEncoder().encode(`"[hi world!]"`));
+    file.close();
 
-    if (fileExists) {
-        try {
-            const content = await readTextFile(filePath, {
-                baseDir: BaseDirectory.Document,
-            });
-            data = JSON.parse(content);
-            if (!Array.isArray(data)) data = [];
-        } catch {
-            data = [];
-        }
+    // try {
+    //     data = JSON.parse("");
+    //     if (!Array.isArray(data)) data = [];
+    // } catch {
+    //     data = [];
+    // }
+
+    // data.push(entry);
+}
+
+export async function openSettings() {
+    try {
+        const newWindow = new WebviewWindow("settings", { center: true, url: "/settings" });
+    } catch (error) {
+        console.log(error);
     }
-
-    data.push(entry);
-
-    await writeTextFile(filePath, JSON.stringify(data, null, 2), {
-        baseDir: BaseDirectory.Document,
-    });
 }
