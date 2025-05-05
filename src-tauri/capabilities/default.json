@@ -13,6 +13,17 @@
         "global-shortcut:allow-unregister",
         "core:window:allow-hide",
         "core:window:allow-show",
-        "fs:default"
+
+        "fs:default",
+        "fs:allow-document-meta",
+        "fs:allow-document-meta-recursive",
+        "fs:allow-document-read",
+        "fs:allow-document-read-recursive",
+        "fs:allow-document-write",
+        "fs:allow-document-write-recursive",
+        "fs:allow-create",
+        "fs:create-app-specific-dirs",
+        "fs:allow-truncate",
+        "fs:allow-exists"
     ]
 }
