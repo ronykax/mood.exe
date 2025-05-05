@@ -4,6 +4,18 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
+// #[tauri::command]
+// async fn open_settings(app: tauri::AppHandle) {
+//     let window_count = app.webview_windows().len();
+//     tauri::WebviewWindowBuilder::new(
+//         &app,
+//         format!("window-{}", window_count),
+//         tauri::WebviewUrl::App("settings.html".into()),
+//     )
+//     .build()
+//     .unwrap();
+// }
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()

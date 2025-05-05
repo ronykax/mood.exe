@@ -1,3 +1,4 @@
+import { invoke } from "@tauri-apps/api/core";
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { BaseDirectory, create, exists, open } from "@tauri-apps/plugin-fs";
 
@@ -74,9 +75,11 @@ export async function addMoodEntry(entry: {
 }
 
 export async function openSettings() {
-    try {
-        const newWindow = new WebviewWindow("settings", { center: true, url: "/settings" });
-    } catch (error) {
-        console.log(error);
-    }
+    new WebviewWindow("settings", {
+        center: true,
+        url: "/settings",
+        width: 400,
+        height: 500,
+        decorations: false,
+    });
 }
