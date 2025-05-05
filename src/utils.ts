@@ -1,6 +1,14 @@
 import { invoke } from "@tauri-apps/api/core";
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
-import { BaseDirectory, create, exists, open } from "@tauri-apps/plugin-fs";
+import {
+    BaseDirectory,
+    create,
+    exists,
+    open,
+    readFile,
+    writeFile,
+} from "@tauri-apps/plugin-fs";
+import { load } from "@tauri-apps/plugin-store";
 
 export function getMoodImages(): string[] {
     const moods = ["stressed", "sad", "calm", "happy"] as const;
@@ -57,12 +65,23 @@ export async function addMoodEntry(entry: {
     mood: string;
     entry: string;
 }) {
-    // let data: any[] = [];
+    const store = await load("store.json", { autoSave: false });
+    const jsonPath = (await store.get("jsonPath")) as string;
 
-    const file = await getThatJsonFile();
+    interface MoodEntry {
+        createdAt: string;
+        mood: string;
+        entry: string;
+    }
 
-    file.write(new TextEncoder().encode(`"[hi world!]"`));
-    file.close();
+    const read = await readFile(jsonPath);
+    const contents = new TextDecoder().decode(read);
+    const parsed: MoodEntry[] = JSON.parse(contents);
+
+    parsed.push(entry);
+
+    const toWrite = new TextEncoder().encode(JSON.stringify(parsed));
+    await writeFile(jsonPath, toWrite);
 
     // try {
     //     data = JSON.parse("");
