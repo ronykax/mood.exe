@@ -1,6 +1,3 @@
-import { Route } from "react-router";
-
-import Settings from "./components/Settings";
 import MoodSelect from "./components/MoodSelect";
 
 import { openSettings } from "./utils";
@@ -30,10 +27,5 @@ export default function App() {
 
     trayIcon();
 
-    return (
-        <>
-            <Route path="/" element={<MoodSelect />} />
-            <Route path="/settings" element={<Settings />} />
-        </>
-    );
+    return <MoodSelect />;
 }
