@@ -1,9 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import { exists, readFile } from "@tauri-apps/plugin-fs";
+import { exists } from "@tauri-apps/plugin-fs";
+
+import { load } from "@tauri-apps/plugin-store";
+// import { platform } from "@tauri-apps/plugin-os"; // delete this package later
 
 export default function Settings() {
     const [jsonPath, setJsonPath] = useState("");
+
+    useEffect(() => {
+        async function yes() {
+            const store = await load("store.json", { autoSave: false });
+            const path = await store.get("jsonPath") as string;
+            
+            setJsonPath(path);
+        }
+
+        yes();
+    }, []);
 
     const handleApply = async () => {
         const fileExists = await exists(jsonPath);
@@ -13,12 +27,19 @@ export default function Settings() {
             return;
         }
 
-        const contents = await readFile(jsonPath);
-        const jsonString = new TextDecoder().decode(contents);
+        const store = await load("store.json", { autoSave: false });
 
-        const acutalJson = JSON.parse(jsonString);
+        await store.set("jsonPath", jsonPath);
 
-        console.log(acutalJson);
+        await store.save();
+        console.log("Saved!");
+
+        // const contents = await readFile(jsonPath);
+        // const jsonString = new TextDecoder().decode(contents);
+
+        // const acutalJson: MoodEntry[] = JSON.parse(jsonString);
+
+        // console.log(acutalJson);
     };
 
     return (

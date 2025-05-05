@@ -1,7 +1,13 @@
 import { useEffect, useRef } from "react";
 import { addMoodEntry } from "../utils";
 
-export default function Modal({ mood }: { mood: string }) {
+export default function Modal({
+    mood,
+    close,
+}: {
+    mood: string;
+    close: () => void;
+}) {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
@@ -15,7 +21,7 @@ export default function Modal({ mood }: { mood: string }) {
             e.preventDefault();
 
             const value = textareaRef.current?.value;
-            value && saveEntry(value);
+            saveEntry(value || "");
         }
     };
 
@@ -25,6 +31,8 @@ export default function Modal({ mood }: { mood: string }) {
             createdAt: new Date().toISOString(),
             mood: mood,
         });
+
+        close();
     }
 
     function getPlaceholder(): string {

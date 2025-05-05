@@ -54,7 +54,7 @@ export default function MoodSelect() {
                 ))}
             </div>
 
-            {showModal && <Modal mood={currentMood!} />}
+            {showModal && <Modal mood={currentMood!} close={() => setShowModal(false)} />}
         </div>
     );
 }
