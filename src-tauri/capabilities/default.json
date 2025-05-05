@@ -24,6 +24,8 @@
         "fs:allow-create",
         "fs:create-app-specific-dirs",
         "fs:allow-truncate",
-        "fs:allow-exists"
+        "fs:allow-exists",
+
+        "core:window:allow-create"
     ]
 }
