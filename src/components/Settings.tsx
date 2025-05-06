@@ -9,9 +9,9 @@ export default function Settings() {
     const [jsonPath, setJsonPath] = useState("");
     const [interval, setInterval] = useState(0);
 
-    const [intervalFormat, setIntervalFormat] = useState<
-        "minutes" | "hours" | "days" | "months"
-    >("minutes");
+    type IntervalFormat = "minutes" | "hours" | "days" | "months";
+    const [intervalFormat, setIntervalFormat] =
+        useState<IntervalFormat>("minutes");
 
     const [launchAtStartup, setLaunchAtStartup] = useState(false);
     const [sendNotifications, setSendNotifications] = useState(false);
@@ -29,6 +29,8 @@ export default function Settings() {
             try {
                 const store = await load("store.json", { autoSave: false });
                 const stuff = (await store.get("stuff")) as any;
+
+                console.log(stuff);
 
                 setJsonPath(stuff.jsonPath);
                 setInterval(stuff.interval);
@@ -68,7 +70,13 @@ export default function Settings() {
 
         await store.save();
         console.log("Saved!");
+
+        await closeWindow();
     };
+
+    async function closeWindow() {
+        await getCurrentWindow().close();
+    }
 
     return (
         <div className="bg-gray-900 h-screen flex flex-col justify-between">
@@ -95,12 +103,20 @@ export default function Settings() {
                             type="number"
                             placeholder="24"
                             className="p-2 border rounded-md border-white/50 w-full"
+                            value={interval}
+                            onChange={(e) =>
+                                setInterval(e.target.value as unknown as number)
+                            }
                         />
 
                         <select
                             className="p-2 border rounded-md border-white/50 w-[40%]"
-                            name=""
-                            id=""
+                            onChange={(e) =>
+                                setIntervalFormat(
+                                    e.target.value as IntervalFormat
+                                )
+                            }
+                            value={intervalFormat}
                         >
                             <option className="bg-gray-800" value="min">
                                 Minutes
@@ -119,14 +135,22 @@ export default function Settings() {
                 </label>
 
                 <label className="flex gap-2">
-                    <input type="checkbox" />
+                    <input
+                        type="checkbox"
+                        checked={launchAtStartup}
+                        onChange={(e) => setLaunchAtStartup(e.target.checked)}
+                    />
                     <span className="text-sm font-semibold opacity-75">
                         Launch At Startup?
                     </span>
                 </label>
 
                 <label className="flex gap-2">
-                    <input type="checkbox" />
+                    <input
+                        type="checkbox"
+                        checked={sendNotifications}
+                        onChange={(e) => setSendNotifications(e.target.checked)}
+                    />
                     <span className="text-sm font-semibold opacity-75">
                         Send Notifications?
                     </span>
@@ -143,7 +167,7 @@ export default function Settings() {
 
                 <button
                     className="w-full px-4 py-3 bg-red-400/30 rounded-md cursor-pointer"
-                    onClick={() => getCurrentWindow().close()}
+                    onClick={closeWindow}
                 >
                     Close
                 </button>
