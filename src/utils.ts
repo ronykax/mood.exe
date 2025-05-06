@@ -92,3 +92,5 @@ export async function openSettings() {
         decorations: false,
     });
 }
+
+export type IntervalFormat = "minutes" | "hours" | "days" | "months";

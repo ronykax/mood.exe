@@ -3,13 +3,13 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import { exists } from "@tauri-apps/plugin-fs";
 
 import { load } from "@tauri-apps/plugin-store";
+import { IntervalFormat } from "../utils";
 // import { platform } from "@tauri-apps/plugin-os"; // delete this package later
 
 export default function Settings() {
     const [jsonPath, setJsonPath] = useState("");
     const [interval, setInterval] = useState(0);
 
-    type IntervalFormat = "minutes" | "hours" | "days" | "months";
     const [intervalFormat, setIntervalFormat] =
         useState<IntervalFormat>("minutes");
 
@@ -118,16 +118,16 @@ export default function Settings() {
                             }
                             value={intervalFormat}
                         >
-                            <option className="bg-gray-800" value="min">
+                            <option className="bg-gray-800" value="minutes">
                                 Minutes
                             </option>
-                            <option className="bg-gray-800" value="hrs">
+                            <option className="bg-gray-800" value="hours">
                                 Hours
                             </option>
-                            <option className="bg-gray-800" value="day">
+                            <option className="bg-gray-800" value="days">
                                 Days
                             </option>
-                            <option className="bg-gray-800" value="mth">
+                            <option className="bg-gray-800" value="months">
                                 Months
                             </option>
                         </select>
