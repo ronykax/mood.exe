@@ -1,4 +1,3 @@
-import { invoke } from "@tauri-apps/api/core";
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import {
     BaseDirectory,
@@ -66,7 +65,7 @@ export async function addMoodEntry(entry: {
     entry: string;
 }) {
     const store = await load("store.json", { autoSave: false });
-    const jsonPath = (await store.get("jsonPath")) as string;
+    const stuff = (await store.get("stuff")) as any;
 
     interface MoodEntry {
         createdAt: string;
@@ -74,23 +73,14 @@ export async function addMoodEntry(entry: {
         entry: string;
     }
 
-    const read = await readFile(jsonPath);
+    const read = await readFile(stuff.jsonPath);
     const contents = new TextDecoder().decode(read);
     const parsed: MoodEntry[] = JSON.parse(contents);
 
     parsed.push(entry);
 
     const toWrite = new TextEncoder().encode(JSON.stringify(parsed));
-    await writeFile(jsonPath, toWrite);
-
-    // try {
-    //     data = JSON.parse("");
-    //     if (!Array.isArray(data)) data = [];
-    // } catch {
-    //     data = [];
-    // }
-
-    // data.push(entry);
+    await writeFile(stuff.jsonPath, toWrite);
 }
 
 export async function openSettings() {

@@ -8,7 +8,11 @@ import { load } from "@tauri-apps/plugin-store";
 export default function Settings() {
     const [jsonPath, setJsonPath] = useState("");
     const [interval, setInterval] = useState(0);
-    const [intervalFormat, setIntervalFormat] = useState<"minutes" | "hours" | "days" | "months">("minutes");
+
+    const [intervalFormat, setIntervalFormat] = useState<
+        "minutes" | "hours" | "days" | "months"
+    >("minutes");
+
     const [launchAtStartup, setLaunchAtStartup] = useState(false);
     const [sendNotifications, setSendNotifications] = useState(false);
 
@@ -22,10 +26,22 @@ export default function Settings() {
 
     useEffect(() => {
         async function yes() {
-            const store = await load("store.json", { autoSave: false });
-            const path = (await store.get("jsonPath")) as string;
+            try {
+                const store = await load("store.json", { autoSave: false });
+                const stuff = (await store.get("stuff")) as any;
 
-            setJsonPath(path);
+                setJsonPath(stuff.jsonPath);
+                setInterval(stuff.interval);
+                setIntervalFormat(stuff.intervalFormat);
+                setLaunchAtStartup(stuff.launchAtStartup);
+                setSendNotifications(stuff.sendNotifications);
+            } catch {
+                setJsonPath("");
+                setInterval(2);
+                setIntervalFormat("hours");
+                setLaunchAtStartup(true);
+                setSendNotifications(true);
+            }
         }
 
         yes();
@@ -41,22 +57,21 @@ export default function Settings() {
 
         const store = await load("store.json", { autoSave: false });
 
-        await store.set("jsonPath", jsonPath);
+        // await store.set("jsonPath", jsonPath);
+        await store.set("stuff", {
+            jsonPath,
+            interval,
+            intervalFormat,
+            launchAtStartup,
+            sendNotifications,
+        });
 
         await store.save();
         console.log("Saved!");
-
-        // const contents = await readFile(jsonPath);
-        // const jsonString = new TextDecoder().decode(contents);
-
-        // const acutalJson: MoodEntry[] = JSON.parse(jsonString);
-
-        // console.log(acutalJson);
     };
 
     return (
         <div className="bg-gray-900 h-screen flex flex-col justify-between">
-            
             <div className="p-4 flex flex-col gap-4">
                 <label className="flex flex-col gap-2">
                     <span className="text-sm font-semibold opacity-75">
