@@ -6,7 +6,7 @@ import { Menu } from "@tauri-apps/api/menu";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useEffect } from "react";
 import { load } from "@tauri-apps/plugin-store";
-import { enable, isEnabled } from "@tauri-apps/plugin-autostart";
+import { disable, enable, isEnabled } from "@tauri-apps/plugin-autostart";
 
 export default function App() {
     async function showWindow() {
@@ -38,8 +38,10 @@ export default function App() {
             const waitTime =
                 interval * formatToMs[intervalFormat as IntervalFormat]; // convert interval and format to ms
 
-            if (!(await isEnabled())) {
-                launchAtStartup && (await enable());
+            if (launchAtStartup) {
+                !(await isEnabled()) && (await enable());
+            } else {
+                (await isEnabled()) && (await disable());
             }
 
             setInterval(async () => {
