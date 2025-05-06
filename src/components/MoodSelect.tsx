@@ -1,25 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getMoodImages } from "../utils";
 import Modal from "./Modal";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 
 export default function MoodSelect() {
-    window.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-            showModal && setShowModal(false);
+    useEffect(() => {
+        setMoods(getMoodImages());
+    }, []);
+
+    useEffect(() => {
+        function handleKeyDown(e: KeyboardEvent) {
+            if (e.key === "Escape") {
+                setShowModal(false);
+            }
         }
-    });
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, []);
 
     const [currentMood, setCurrentMood] = useState<string>();
     const [showModal, setShowModal] = useState(false);
+    const [moods, setMoods] = useState<string[]>([]);
 
     function handleClick(mood: string) {
         setCurrentMood(mood);
         setShowModal(true);
     }
 
-    const moods = getMoodImages();
-
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+    async function closeWindowAhh() {
+        await getCurrentWindow().hide();
+        setShowModal(false);
+    }
 
     return (
         <div className="w-full h-screen">
@@ -34,7 +48,11 @@ export default function MoodSelect() {
                         onMouseEnter={() => setHoveredIndex(i)}
                         onMouseLeave={() => setHoveredIndex(null)}
                     >
-                        <img className="w-full h-full" src={src} alt="Mood" />
+                        <img
+                            className="w-full h-full aspect-square"
+                            src={src}
+                            alt="Mood"
+                        />
 
                         <div
                             className={`absolute w-full h-full top-0 right-0 transition-colors duration-200 ${
@@ -54,7 +72,7 @@ export default function MoodSelect() {
                 ))}
             </div>
 
-            {showModal && <Modal mood={currentMood!} close={() => setShowModal(false)} />}
+            {showModal && <Modal mood={currentMood!} close={closeWindowAhh} />}
         </div>
     );
 }

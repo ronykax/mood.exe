@@ -74,7 +74,11 @@ export default function Modal({
                         <span className="font-mono bg-white/20 rounded-xs px-0.5">
                             enter
                         </span>{" "}
-                        to skip or submit
+                        to submit or{" "}
+                        <span className="font-mono bg-white/20 rounded-xs px-0.5">
+                            esc
+                        </span>{" "}
+                        to cancel
                     </span>
                 </div>
             </div>

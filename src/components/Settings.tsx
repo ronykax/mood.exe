@@ -7,12 +7,24 @@ import { load } from "@tauri-apps/plugin-store";
 
 export default function Settings() {
     const [jsonPath, setJsonPath] = useState("");
+    const [interval, setInterval] = useState(0);
+    const [intervalFormat, setIntervalFormat] = useState<"minutes" | "hours" | "days" | "months">("minutes");
+    const [launchAtStartup, setLaunchAtStartup] = useState(false);
+    const [sendNotifications, setSendNotifications] = useState(false);
+
+    // const [settings, setSettings] = useState<{
+    //     jsonPath: string;
+    //     interval: string;
+    //     intervalFormat: string;
+    //     launchAtStartup: boolean;
+    //     sendNotifications: boolean;
+    // }>();
 
     useEffect(() => {
         async function yes() {
             const store = await load("store.json", { autoSave: false });
-            const path = await store.get("jsonPath") as string;
-            
+            const path = (await store.get("jsonPath")) as string;
+
             setJsonPath(path);
         }
 
@@ -44,7 +56,8 @@ export default function Settings() {
 
     return (
         <div className="bg-gray-900 h-screen flex flex-col justify-between">
-            <div className="p-4">
+            
+            <div className="p-4 flex flex-col gap-4">
                 <label className="flex flex-col gap-2">
                     <span className="text-sm font-semibold opacity-75">
                         Path to JSON file
@@ -56,6 +69,52 @@ export default function Settings() {
                         value={jsonPath}
                         onChange={(e) => setJsonPath(e.target.value)}
                     />
+                </label>
+
+                <label className="flex flex-col gap-2">
+                    <span className="text-sm font-semibold opacity-75">
+                        Interval
+                    </span>
+                    <div className="flex gap-2">
+                        <input
+                            type="number"
+                            placeholder="24"
+                            className="p-2 border rounded-md border-white/50 w-full"
+                        />
+
+                        <select
+                            className="p-2 border rounded-md border-white/50 w-[40%]"
+                            name=""
+                            id=""
+                        >
+                            <option className="bg-gray-800" value="min">
+                                Minutes
+                            </option>
+                            <option className="bg-gray-800" value="hrs">
+                                Hours
+                            </option>
+                            <option className="bg-gray-800" value="day">
+                                Days
+                            </option>
+                            <option className="bg-gray-800" value="mth">
+                                Months
+                            </option>
+                        </select>
+                    </div>
+                </label>
+
+                <label className="flex gap-2">
+                    <input type="checkbox" />
+                    <span className="text-sm font-semibold opacity-75">
+                        Launch At Startup?
+                    </span>
+                </label>
+
+                <label className="flex gap-2">
+                    <input type="checkbox" />
+                    <span className="text-sm font-semibold opacity-75">
+                        Send Notifications?
+                    </span>
                 </label>
             </div>
 
