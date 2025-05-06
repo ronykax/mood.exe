@@ -1,37 +1,10 @@
 {
-    "$schema": "../gen/schemas/desktop-schema.json",
-    "identifier": "default",
-    "description": "Capability for the main window",
-    "windows": ["main", "settings"],
-    "permissions": [
-        "core:default",
-        "opener:default",
-        "core:window:allow-start-dragging",
-        "notification:default",
-        "global-shortcut:allow-is-registered",
-        "global-shortcut:allow-register",
-        "global-shortcut:allow-unregister",
-        "core:window:allow-hide",
-        "core:window:allow-show",
-
-        "fs:default",
-        "fs:allow-document-meta",
-        "fs:allow-document-meta-recursive",
-        "fs:allow-document-read",
-        "fs:allow-document-read-recursive",
-        "fs:allow-document-write",
-        "fs:allow-document-write-recursive",
-        "fs:allow-create",
-        "fs:create-app-specific-dirs",
-        "fs:allow-truncate",
-        "fs:allow-exists",
-
-        "core:webview:allow-create-webview-window",
-        "core:webview:allow-create-webview",
-        "core:window:allow-create",
-        "core:webview:allow-webview-close",
-        "core:window:allow-close",
-
-        "store:default"
-    ]
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Capability for the main window",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "opener:default"
+  ]
 }

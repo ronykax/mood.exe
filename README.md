@@ -1,11 +1,7 @@
-# mood.exe
-mood.exe is a cross-platform desktop app that prompts you to log your mood at regular intervals.
+# Tauri + SvelteKit + TypeScript
 
-## how it works
--   auto launches at startup
--   prompts you to log your mood every 40 minutes (you can change this interval in the app settings)
--   choose between four moods
--   optionally add an entry about how you feel at that moment
--   everything is stored in a single JSON file located at `Documents/mood.json`
+This template should help get you started developing with Tauri, SvelteKit and TypeScript in Vite.
 
-To sync your logs across devices, you can move the `mood.json` file to a folder synced by OneDrive, iCloud, or any other cloud service.
+## Recommended IDE Setup
+
+[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
