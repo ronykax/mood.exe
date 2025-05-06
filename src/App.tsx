@@ -6,6 +6,7 @@ import { Menu } from "@tauri-apps/api/menu";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useEffect } from "react";
 import { load } from "@tauri-apps/plugin-store";
+import { enable, isEnabled } from "@tauri-apps/plugin-autostart";
 
 export default function App() {
     async function showWindow() {
@@ -25,7 +26,7 @@ export default function App() {
             const store = await load("store.json", { autoSave: false });
             const stuff = (await store.get("stuff")) as any;
 
-            const { interval, intervalFormat } = stuff; // get interval and format like 1 hour or 30 minutes
+            const { interval, intervalFormat, launchAtStartup } = stuff; // get interval and format like 1 hour or 30 minutes
 
             const formatToMs: Record<IntervalFormat, number> = {
                 minutes: 60_000,
@@ -36,6 +37,10 @@ export default function App() {
 
             const waitTime =
                 interval * formatToMs[intervalFormat as IntervalFormat]; // convert interval and format to ms
+
+            if (!(await isEnabled())) {
+                launchAtStartup && (await enable());
+            }
 
             setInterval(async () => {
                 const theWindow = getCurrentWindow();

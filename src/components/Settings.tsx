@@ -4,6 +4,7 @@ import { exists } from "@tauri-apps/plugin-fs";
 
 import { load } from "@tauri-apps/plugin-store";
 import { IntervalFormat } from "../utils";
+import { disable, enable } from "@tauri-apps/plugin-autostart";
 // import { platform } from "@tauri-apps/plugin-os"; // delete this package later
 
 export default function Settings() {
@@ -55,6 +56,12 @@ export default function Settings() {
         if (!fileExists) {
             console.error("JSON file path doesn't exist!");
             return;
+        }
+
+        if (launchAtStartup) {
+            await enable();
+        } else {
+            await disable();
         }
 
         const store = await load("store.json", { autoSave: false });

@@ -11,7 +11,9 @@ export default function MoodSelect() {
     useEffect(() => {
         function handleKeyDown(e: KeyboardEvent) {
             if (e.key === "Escape") {
-                setShowModal(false);
+                if (showModal) {
+                    setShowModal(false);
+                }
             }
         }
 
