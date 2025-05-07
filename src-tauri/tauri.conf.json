@@ -13,10 +13,11 @@
         "windows": [
             {
                 "title": "mood.exe",
-                "width": 500,
-                "height": 500,
+                "width": 700,
+                "height": 300,
                 "center": true,
-                "decorations": false
+                "decorations": false,
+                "resizable": false
             }
         ],
         "security": {
