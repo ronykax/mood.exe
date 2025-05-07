@@ -37,8 +37,9 @@
 </script>
 
 <div class="bg-black/90 w-screen h-screen p-4 text-white">
-    <div class="flex flex-col gap-2 w-full h-full">
-        <div class="h-full">
+    <div class="flex flex-col gap-4 w-full h-full">
+        <!-- inputs -->
+        <div class="h-full flex flex-col gap-4">
             <label class="flex flex-col gap-2">
                 <span class="text-sm font-semibold opacity-75">
                     JSON File Path
@@ -50,8 +51,38 @@
                     bind:value={jsonPath}
                 />
             </label>
+
+            <label class="flex flex-col gap-2">
+                <span class="text-sm font-semibold opacity-75">Interval</span>
+                <div class="flex gap-2">
+                    <input
+                        type="number"
+                        class="p-2 border rounded-md border-white/25 w-full"
+                        placeholder="24"
+                    />
+
+                    <select
+                        class="p-2 border rounded-md border-white/25 w-[40%]"
+                    >
+                        <option class="bg-black/85" value="minutes"
+                            >Minutes</option
+                        >
+                        <option class="bg-black/85" value="hours">Hours</option>
+                        <option class="bg-black/85" value="days">Days</option>
+                        <option class="bg-black/85" value="months"
+                            >Months</option
+                        >
+                    </select>
+                </div>
+            </label>
+
+            <label class="flex items-center gap-2">
+                <input type="checkbox" />
+                <span>Launch At Startup</span>
+            </label>
         </div>
 
+        <!-- buttons -->
         <div class="flex gap-2">
             <button
                 class="px-4 py-2 bg-green-400/20 rounded-md w-full cursor-pointer hover:bg-green-400/30"

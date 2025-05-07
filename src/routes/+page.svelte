@@ -9,15 +9,16 @@
     let showStartMsg = $state(true);
     onMount(() => (showStartMsg = false));
 
-    let hoveredIndex = $state<number | null>(null);
+    let placeholder = $state("how are you feeling right now?");
 
-    $effect(() => console.log(moods));
+    let startAnimation = $state(false);
+    onMount(() => (startAnimation = true));
 </script>
 
 <main class="w-screen h-screen bg-black text-white">
     {#if showStartMsg}
         <div
-            class="w-full h-full bg-black/50 fixed flex justify-center items-center backdrop-blur-[16px]"
+            class="w-full h-full bg-black/50 fixed z-[50] flex justify-center items-center backdrop-blur-[16px]"
             out:fade={{ duration: 500, delay: 1800 }}
         >
             <span
@@ -33,25 +34,30 @@
     <div class="flex flex-col w-full h-full">
         <div class="flex gap-[1px] w-full">
             {#each moods as item, index}
-                <button
-                    class="w-full h-full aspect-square"
-                    onmouseenter={() => (hoveredIndex = index)}
-                    onmouseleave={() => (hoveredIndex = null)}
-                >
-                    <img
-                        class="w-full h-full"
-                        src={item}
-                        alt=""
-                        draggable="false"
-                    />
-                </button>
+                {#if !showStartMsg && startAnimation}
+                    <button
+                        class="w-full h-full aspect-square relative cursor-pointer overflow-hidden group"
+                        in:fade={{ delay: (index + 1) * 200, duration: 600 }}
+                    >
+                        <img
+                            class="w-full h-full object-cover hover:scale-[112%] duration-150"
+                            src={item}
+                            alt={item}
+                            draggable="false"
+                        />
+
+                        <div class="w-full h-full">
+
+                        </div>
+                    </button>
+                {/if}
             {/each}
         </div>
 
         <input
             type="text"
-            class="w-full h-full bg-white/5 focus:outline-none px-6 placeholder:italic"
-            placeholder="how are you feeling right now?"
+            class="w-full h-full bg-white/10 focus:outline-none px-6 placeholder:italic"
+            {placeholder}
         />
     </div>
 </main>
