@@ -22,3 +22,7 @@ export function getMoodImages(): string[] {
 
     return result;
 }
+
+export function getMoodName(path: string) {
+    return path.split("/").pop()?.slice(0, -7);
+}
