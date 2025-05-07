@@ -15,10 +15,12 @@
     onMount(() => (startAnimation = true));
 </script>
 
-<main class="w-screen h-screen bg-black text-white">
+<main
+    class="w-screen h-screen text-white p-1 bg-gradient-to-r from-stone-500 to-stone-700"
+>
     {#if showStartMsg}
         <div
-            class="w-full h-full bg-black/50 fixed z-[50] flex justify-center items-center backdrop-blur-[16px]"
+            class="w-full h-full bg-black/50 fixed top-0 right-0 z-[50] flex justify-center items-center backdrop-blur-[16px]"
             out:fade={{ duration: 500, delay: 1800 }}
         >
             <span
@@ -31,24 +33,22 @@
         </div>
     {/if}
 
-    <div class="flex flex-col w-full h-full">
-        <div class="flex gap-[1px] w-full">
+    <div class="flex flex-col w-full h-full rounded-[6px] overflow-hidden gap-1">
+        <div class="flex gap-1 w-full">
             {#each moods as item, index}
                 {#if !showStartMsg && startAnimation}
                     <button
-                        class="w-full h-full aspect-square relative cursor-pointer overflow-hidden group"
+                        class="w-full h-full aspect-square cursor-pointer overflow-hidden group"
                         in:fade={{ delay: (index + 1) * 200, duration: 600 }}
                     >
                         <img
-                            class="w-full h-full object-cover hover:scale-[112%] duration-150"
+                            class="w-full h-full object-cover hover:scale-[112%] duration-150 shadow-xs"
                             src={item}
                             alt={item}
                             draggable="false"
                         />
 
-                        <div class="w-full h-full">
-
-                        </div>
+                        <div class="w-full h-full text-2xl">hi</div>
                     </button>
                 {/if}
             {/each}
@@ -56,8 +56,14 @@
 
         <input
             type="text"
-            class="w-full h-full bg-white/10 focus:outline-none px-6 placeholder:italic"
+            class="w-full h-full bg-black/65 focus:outline-none px-6 placeholder:italic"
             {placeholder}
         />
+
+        <!-- <input
+            type="text"
+            class="w-full h-full bg-white/10 focus:outline-none px-6 placeholder:italic"
+            {placeholder}
+        /> -->
     </div>
 </main>
