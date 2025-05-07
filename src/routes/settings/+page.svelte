@@ -2,10 +2,22 @@
     import { getCurrentWindow } from "@tauri-apps/api/window";
     import { exists } from "@tauri-apps/plugin-fs";
     import { load } from "@tauri-apps/plugin-store";
+    import { onMount } from "svelte";
 
     let jsonPath = $state("");
 
+    // load settings
+    onMount(async () => {
+        const store = await load("settings.json", { autoSave: false });
+        jsonPath = (await store.get("jsonPath")) || "";
+    });
+
     async function handleApply() {
+        if (!jsonPath.endsWith(".json")) {
+            console.log("provide a json file!");
+            return;
+        }
+
         if (!(await exists(jsonPath))) {
             console.log("invalid file path");
             return;
