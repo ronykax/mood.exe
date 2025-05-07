@@ -1,7 +1,7 @@
 use tauri::{
     menu::{Menu, MenuItem},
     tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
-    Manager,
+    Manager, WebviewUrl, WebviewWindowBuilder,
 };
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
@@ -13,6 +13,8 @@ fn greet(name: &str) -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_store::Builder::new().build())
+        .plugin(tauri_plugin_fs::init())
         .setup(|app| {
             let quit = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
             let settings = MenuItem::with_id(app, "settings", "Settings", true, None::<&str>)?;
@@ -28,8 +30,17 @@ pub fn run() {
                         app.exit(0);
                     }
                     "settings" => {
-                        let main_window = app.get_webview_window("main").unwrap();
-                        main_window.hide().unwrap();
+                        WebviewWindowBuilder::new(
+                            app,
+                            "settings".to_string(),
+                            WebviewUrl::App("/settings".into()),
+                        )
+                        .title("Settings")
+                        .center()
+                        .decorations(false)
+                        .inner_size(450.0, 550.0)
+                        .build()
+                        .unwrap();
                     }
                     _ => {
                         println!("menu item not handled!");
@@ -42,8 +53,9 @@ pub fn run() {
                         ..
                     } => {
                         println!("left click pressed and released");
-                        // in this example, let's show and focus the main window when the tray is clicked
+
                         let app = tray.app_handle();
+
                         if let Some(window) = app.get_webview_window("main") {
                             if window.is_visible().unwrap() {
                                 window.hide().unwrap();

@@ -1,23 +1,14 @@
 <script lang="ts">
-    import { invoke } from "@tauri-apps/api/core";
+    import { getMoodImages } from "$lib";
 
-    let name = $state("");
-    let greetMsg = $state("");
-
-    async function greet(event: Event) {
-        event.preventDefault();
-        greetMsg = await invoke("greet", { name });
-    }
+    let moods = $state<string[]>([]);
+    moods = getMoodImages();
 </script>
 
-<div>
-    <form onsubmit={greet}>
-        <input
-            id="greet-input"
-            placeholder="Enter a name..."
-            bind:value={name}
-        />
-        <button type="submit">Greet</button>
-    </form>
-    <p>{greetMsg}</p>
-</div>
+<main class="w-screen h-screen grid grid-cols-2">
+    {#each moods as item}
+        <div class="w-full h-full">
+            <img class="w-full h-full aspect-square" src={item} alt="" />
+        </div>
+    {/each}
+</main>
