@@ -1,11 +1,22 @@
 <script lang="ts">
     import { getCurrentWindow } from "@tauri-apps/api/window";
     import { exists } from "@tauri-apps/plugin-fs";
+    import { load } from "@tauri-apps/plugin-store";
 
     let jsonPath = $state("");
 
     async function handleApply() {
-        await exists(jsonPath);
+        if (!(await exists(jsonPath))) {
+            console.log("invalid file path");
+            return;
+        }
+
+        const store = await load("settings.json", { autoSave: false });
+
+        await store.set("jsonPath", jsonPath);
+        await store.save();
+
+        console.log("saved!");
     }
 
     async function handleClose() {
