@@ -9,8 +9,11 @@
         "core:window:allow-close",
         "fs:default",
         "store:default",
-
         "fs:allow-exists",
+        "fs:allow-write",
+        "fs:allow-write-file",
+        "fs:allow-read",
+        "fs:allow-read-file",
         "fs:scope-document"
     ]
 }
