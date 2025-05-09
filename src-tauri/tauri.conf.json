@@ -13,8 +13,8 @@
         "windows": [
             {
                 "title": "mood.exe",
-                "width": 650,
-                "height": 350,
+                "width": 600,
+                "height": 400,
                 "center": true,
                 "decorations": false,
                 "resizable": false
