@@ -1,11 +1,10 @@
 <script lang="ts">
     import { getMoodImages, getMoodName } from "$lib";
     import { submitEntry } from "$lib/submit-entry";
-    import { hide } from "@tauri-apps/api/app";
+    import { getCurrentWindow } from "@tauri-apps/api/window";
     import { onMount } from "svelte";
     import { fade } from "svelte/transition";
 
-    //
     import InputEntry from "$components/input-entry.svelte";
     import { inputStore } from "$stores/input";
     import Navbar from "$components/navbar.svelte";
@@ -13,6 +12,7 @@
     let moods = $state<string[]>([]);
     moods = getMoodImages();
 
+    let showCloseMsg = $state(false);
     let showStartMsg = $state(true);
     onMount(() => (showStartMsg = false));
 
@@ -23,16 +23,23 @@
     let capturedImage = $state("");
 
     async function submit() {
+        showCloseMsg = true;
+
         await submitEntry({
             capturedImage: "",
             createdAt: new Date().toISOString(),
             entry: $inputStore,
             mood: selectedMood,
         });
-
-        // hide window
-        await hide();
     }
+
+    $effect(() => {
+        if (showCloseMsg) {
+            setTimeout(async () => {
+                await getCurrentWindow().hide();
+            }, 1250);
+        }
+    });
 
     let selectedIndex = $state<number | null>(null);
 
@@ -42,26 +49,42 @@
     }
 </script>
 
-<main class="flex flex-col overflow-hidden h-screen bg-gradient-to-r from-stone-500 to-stone-700 text-white">
-    <Navbar />
-    <main
-        class="w-screen h-full p-2"
+{#if showStartMsg}
+    <div
+        class="w-full h-full bg-black/50 fixed top-0 right-0 z-[50] flex justify-center items-center backdrop-blur-[16px] text-white"
+        out:fade={{ duration: 500, delay: 1800 }}
     >
-        {#if showStartMsg}
-            <div
-                class="w-full h-full bg-black/50 fixed top-0 right-0 z-[50] flex justify-center items-center backdrop-blur-[16px]"
-                out:fade={{ duration: 500, delay: 1800 }}
-            >
-                <span
-                    class="text-4xl font-semibold text-center leading-18"
-                    style="text-shadow: -4px 4px 0 black;"
-                    out:fade={{ duration: 500, delay: 1500 }}
-                >
-                    how are you feeling right now?
-                </span>
-            </div>
-        {/if}
+        <span
+            class="text-4xl font-semibold text-center leading-18"
+            style="text-shadow: -4px 4px 0 black;"
+            out:fade={{ duration: 500, delay: 1500 }}
+        >
+            how are you feeling right now?
+        </span>
+    </div>
+{/if}
 
+{#if showCloseMsg}
+    <div
+        class="w-full h-full bg-black/50 fixed top-0 right-0 z-[50] flex justify-center items-center backdrop-blur-[16px] text-white"
+        in:fade={{ duration: 500 }}
+    >
+        <span
+            class="text-4xl font-semibold text-center leading-18"
+            style="text-shadow: -4px 4px 0 black;"
+            in:fade={{ duration: 500 }}
+        >
+            thanks for sharing :)
+        </span>
+    </div>
+{/if}
+
+<main
+    class="flex flex-col overflow-hidden h-screen bg-gradient-to-r from-stone-500 to-stone-700 text-white"
+>
+    <Navbar />
+
+    <main class="w-screen h-full p-2">
         <div class="flex flex-col w-full h-full overflow-hidden gap-2">
             <div class="flex gap-2 w-full">
                 {#each moods as item, index}
@@ -76,7 +99,7 @@
                         >
                             <img
                                 class="w-full h-full object-cover duration-150 rounded-xl {selectedIndex ===
-                                    index && 'border-[5px]'} {index === 2
+                                    index && 'border-[4.75px]'} {index === 2
                                     ? 'border-green-400/75'
                                     : index === 1
                                       ? 'border-yellow-300/75'
@@ -102,7 +125,11 @@
             </div>
 
             <div class="flex w-full h-full">
-                <InputEntry placeholder={"how are you feeling right now?"} />
+                <InputEntry
+                    placeholder={"why are you feeling this way?"}
+                    mood={selectedMood}
+                    onClick={submit}
+                />
             </div>
         </div>
     </main>
