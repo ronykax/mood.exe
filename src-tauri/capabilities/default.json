@@ -17,6 +17,7 @@
         "fs:scope-document",
         "core:app:allow-app-hide",
         "core:window:allow-hide",
-        "core:window:allow-start-dragging"
+        "core:window:allow-start-dragging",
+        "core:window:allow-minimize"
     ]
 }

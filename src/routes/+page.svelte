@@ -2,7 +2,7 @@
     import { getMoodImages, getMoodName } from "$lib";
     import { submitEntry } from "$lib/submit-entry";
     import { getCurrentWindow } from "@tauri-apps/api/window";
-    import { onDestroy, onMount } from "svelte";
+    import { onMount } from "svelte";
     import { fade } from "svelte/transition";
 
     import InputEntry from "$components/input-entry.svelte";
