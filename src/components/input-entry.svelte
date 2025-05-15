@@ -1,11 +1,10 @@
 <script lang="ts">
     interface Props {
         placeholder: string;
-        mood: string;
         onClick: () => void;
     }
 
-    let { placeholder, mood, onClick }: Props = $props();
+    let { placeholder, onClick }: Props = $props();
     import { inputStore } from "../stores/input";
 
     let inputEntry = $state("");
@@ -14,7 +13,9 @@
     function handleKeyDown(e: KeyboardEvent) {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault(); // prevent new line
-            onClick(); // trigger submit
+
+            inputEntry = "";
+            onClick();
         }
     }
 </script>

@@ -2,7 +2,7 @@
     import { getMoodImages, getMoodName } from "$lib";
     import { submitEntry } from "$lib/submit-entry";
     import { getCurrentWindow } from "@tauri-apps/api/window";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { fade } from "svelte/transition";
 
     import InputEntry from "$components/input-entry.svelte";
@@ -37,6 +37,11 @@
         if (showCloseMsg) {
             setTimeout(async () => {
                 await getCurrentWindow().hide();
+
+                // reset everything for next time
+                showCloseMsg = false;
+                selectedMood = "";
+                selectedIndex = null;
             }, 1250);
         }
     });
@@ -127,7 +132,6 @@
             <div class="flex w-full h-full">
                 <InputEntry
                     placeholder={"why are you feeling this way?"}
-                    mood={selectedMood}
                     onClick={submit}
                 />
             </div>
