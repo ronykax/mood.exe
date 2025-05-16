@@ -25,7 +25,7 @@ pub fn run() {
             let settings = MenuItem::with_id(app, "settings", "Settings", true, None::<&str>)?;
             let recent = MenuItem::with_id(app, "recent", "Recent", true, None::<&str>)?;
 
-            let menu = Menu::with_items(app, &[&quit, &settings, recent])?;
+            let menu = Menu::with_items(app, &[&quit, &settings, &recent])?;
 
             let _ = TrayIconBuilder::new()
                 .show_menu_on_left_click(false)
@@ -85,7 +85,6 @@ pub fn run() {
                         }
                     }
                     _ => {
-                        println!("unhandled event {event:?}");
                     }
                 })
                 .icon(app.default_window_icon().unwrap().clone())

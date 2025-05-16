@@ -1,9 +1,14 @@
 <script lang="ts">
+    // cloaeable means the window will "close" if clicked on X
+    let { closeable = false }: { closeable?: boolean } = $props();
+
     import { getCurrentWindow } from "@tauri-apps/api/window";
     import Icon from "@iconify/svelte";
 
     async function closeWindow() {
-        await getCurrentWindow().hide();
+        closeable
+            ? await getCurrentWindow().close()
+            : await getCurrentWindow().hide();
     }
 
     async function minimizeWindow() {
@@ -13,7 +18,7 @@
 
 <div
     data-tauri-drag-region
-    class="flex w-screen p-2 bg-black/50 justify-between items-center"
+    class="flex w-full p-2 bg-black/50 justify-between items-center"
 >
     <span class="text-white/50 font-semibold text-lg">🐈 mood.exe</span>
 
