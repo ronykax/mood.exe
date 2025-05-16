@@ -20,14 +20,14 @@
     <div class="flex gap-2">
         <button
             class="text-white/50 p-1 bg-emerald-400/15 rounded-md cursor-pointer hover:bg-emerald-400/20"
-            onclick={closeWindow}
+            onclick={minimizeWindow}
         >
             <Icon icon="mdi:minimize" width="24" height="24" />
         </button>
 
         <button
             class="text-white/50 p-1 bg-red-400/20 rounded-md cursor-pointer hover:bg-red-400/25"
-            onclick={minimizeWindow}
+            onclick={closeWindow}
         >
             <Icon icon="mdi:close" width="24" height="24" />
             <!-- ❌ -->

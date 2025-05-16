@@ -23,8 +23,9 @@ pub fn run() {
         .setup(|app| {
             let quit = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
             let settings = MenuItem::with_id(app, "settings", "Settings", true, None::<&str>)?;
+            let recent = MenuItem::with_id(app, "recent", "Recent", true, None::<&str>)?;
 
-            let menu = Menu::with_items(app, &[&quit, &settings])?;
+            let menu = Menu::with_items(app, &[&quit, &settings, recent])?;
 
             let _ = TrayIconBuilder::new()
                 .show_menu_on_left_click(false)
@@ -44,6 +45,19 @@ pub fn run() {
                         .center()
                         .decorations(false)
                         .inner_size(450.0, 550.0)
+                        .build()
+                        .unwrap();
+                    }
+                    "recent" => {
+                        WebviewWindowBuilder::new(
+                            app,
+                            "recent".to_string(),
+                            WebviewUrl::App("/recent".into()),
+                        )
+                        .title("Recent")
+                        .center()
+                        .decorations(false)
+                        .inner_size(500.0, 650.0)
                         .build()
                         .unwrap();
                     }
