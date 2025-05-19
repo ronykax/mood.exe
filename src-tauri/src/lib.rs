@@ -52,7 +52,7 @@ pub fn run() {
                         .title("Data")
                         .center()
                         .decorations(false)
-                        .inner_size(750.0, 600.0)
+                        .inner_size(900.0, 700.0)
                         .build()
                         .unwrap();
                     }

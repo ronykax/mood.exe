@@ -44,6 +44,10 @@
                     },
                 ],
             },
+            options: {
+                borderColor: "black",
+                color: "black",
+            },
         });
     });
 </script>
@@ -53,26 +57,49 @@
 >
     <Navbar closeable />
 
-    <div class="p-2 flex">
-        <!-- <div
-            class="p-2 flex flex-col gap-2 h-[calc(100vh-4rem)] overflow-y-auto w-full"
+    <div class="p-2 flex gap-2">
+        <div
+            class="flex flex-col gap-2 h-[calc(100vh-4rem)] overflow-y-auto w-full"
         >
             {#each entries as item}
                 <div
-                    class="bg-black/25 rounded-md p-4 text-white hover:bg-black/35 duration-150 cursor-pointer"
+                    class="bg-black/25 rounded-md p-4 text-white hover:bg-black/35 duration-150 cursor-pointer flex flex-col gap-2"
                 >
-                    <pre
+                    <!-- <pre
                         class="whitespace-pre-wrap break-words">{JSON.stringify(
                             item,
                             null,
                             2
-                        )}</pre>
+                        )}</pre> -->
+
+                    <span class="text-xl font-semibold">
+                        {item.entry}
+                    </span>
+
+                    <div class="flex gap-2 opacity-50">
+                        <span class="">{item.mood}</span>
+                        <span>•</span>
+                        <span class=""
+                            >{new Date(item.createdAt).toLocaleString("en-US", {
+                                month: "long",
+                                day: "numeric",
+                                year: "numeric",
+                                hour: "numeric",
+                                minute: "2-digit",
+                                hour12: true,
+                            })}</span
+                        >
+                    </div>
                 </div>
             {/each}
-        </div> -->
+        </div>
 
-        <div class="w-full">
-            <canvas bind:this={ctx}></canvas>
+        <div class="flex flex-col gap-2">
+            <div class="w-[450px] bg-black/25 p-4 rounded-md">
+                <canvas bind:this={ctx}></canvas>
+            </div>
+
+            <div class="h-full bg-black/25 rounded-md flex flex-col justify-center items-center text-white opacity-75 italic">feature coming soon...</div>
         </div>
     </div>
 </div>
