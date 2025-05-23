@@ -21,6 +21,7 @@
     "@tauri-apps/plugin-opener": "^2",
     "@tauri-apps/plugin-store": "^2.2.0",
     "chart.js": "^4.4.9",
+    "svelte-confetti": "^2.3.1",
     "tailwindcss": "^4.1.7"
   },
   "devDependencies": {

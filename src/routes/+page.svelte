@@ -13,12 +13,15 @@
     import InputEntry from "$components/input-entry.svelte";
     import { inputStore } from "$stores/input";
     import Navbar from "$components/navbar.svelte";
-    import { load } from "@tauri-apps/plugin-store";
     import {
         isPermissionGranted,
         requestPermission,
         sendNotification,
     } from "@tauri-apps/plugin-notification";
+
+    import { Confetti } from "svelte-confetti";
+
+    let showConfetti = $state(false);
 
     let moods = $state<string[]>([]);
     moods = getMoodImages();
@@ -60,6 +63,11 @@
     let selectedIndex = $state<number | null>(null);
 
     function handleClick(item: string, index: number) {
+        if (index === 2) {
+            // meaning "happy" is selected
+            showConfetti = true;
+        }
+
         selectedMood = getMoodName(item) || "";
         selectedIndex = index;
     }
@@ -132,6 +140,20 @@
     class="flex flex-col overflow-hidden h-screen bg-gradient-to-r from-stone-500 to-stone-700 text-white"
 >
     <Navbar />
+    {#if showConfetti}
+        <div
+            class="fixed w-full h-full flex justify-center z-10 -top-[10px] pointer-events-none"
+        >
+            <Confetti
+                x={[-5, 5]}
+                y={[-2, 0.1]}
+                delay={[500, 2000]}
+                infinite={true}
+                amount={100}
+                fallDistance="100vh"
+            />
+        </div>
+    {/if}
 
     <main class="w-screen h-full p-2">
         <div class="flex flex-col w-full h-full overflow-hidden gap-2">
