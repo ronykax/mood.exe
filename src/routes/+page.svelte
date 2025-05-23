@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getMoodImages, getMoodName } from "$lib";
+    import { convertIntervalToMs, getMoodImages, getMoodName } from "$lib";
     import { submitEntry } from "$lib/submit-entry";
     import { getCurrentWindow } from "@tauri-apps/api/window";
     import { onMount } from "svelte";
@@ -8,6 +8,12 @@
     import InputEntry from "$components/input-entry.svelte";
     import { inputStore } from "$stores/input";
     import Navbar from "$components/navbar.svelte";
+    import { load } from "@tauri-apps/plugin-store";
+    import {
+        isPermissionGranted,
+        requestPermission,
+        sendNotification,
+    } from "@tauri-apps/plugin-notification";
 
     let moods = $state<string[]>([]);
     moods = getMoodImages();
@@ -52,6 +58,39 @@
         selectedMood = getMoodName(item) || "";
         selectedIndex = index;
     }
+
+    // start notifs
+    onMount(async () => {
+        // check if can send notification
+        console.log("checking if permission granted");
+        let permissionGranted = await isPermissionGranted();
+
+        if (!permissionGranted) {
+            console.log("permission not granted... requesting permission now");
+
+            const permission = await requestPermission();
+            permissionGranted = permission === "granted";
+        }
+
+        if (!permissionGranted) {
+            console.log("permission not granted...");
+            return;
+        }
+
+        const store = await load("settings.json", { autoSave: false });
+        const interval = await store.get("interval");
+
+        console.log(interval);
+
+        const ms = convertIntervalToMs(interval as string);
+
+        setInterval(() => {
+            sendNotification({
+                title: "how are you feeling right now?",
+                body: "you've been ignoring me for some time now...",
+            });
+        }, ms);
+    });
 </script>
 
 {#if showStartMsg}

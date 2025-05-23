@@ -26,3 +26,21 @@ export function getMoodImages(): string[] {
 export function getMoodName(path: string) {
     return path.split("/").pop()?.slice(0, -7);
 }
+
+export function convertIntervalToMs(interval: string) {
+    const num = parseInt(interval);
+    const unit = interval.slice(-1);
+
+    switch (unit) {
+        case "d":
+            return num * 24 * 60 * 60 * 1000;
+        case "h":
+            return num * 60 * 60 * 1000;
+        case "m":
+            return num * 60 * 1000;
+        case "s":
+            return num * 1000;
+        default:
+            return 0;
+    }
+}

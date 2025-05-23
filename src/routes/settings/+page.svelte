@@ -5,11 +5,14 @@
     import { onMount } from "svelte";
 
     let jsonPath = $state("");
+    let interval = $state("");
 
     // load settings
     onMount(async () => {
         const store = await load("settings.json", { autoSave: false });
+
         jsonPath = (await store.get("jsonPath")) || "";
+        interval = (await store.get("interval")) || "";
     });
 
     async function handleApply() {
@@ -19,16 +22,25 @@
         }
 
         if (!(await exists(jsonPath))) {
-            console.log("invalid file path");
+            console.log("invalid file path!");
+            return;
+        }
+
+        // remove "s" in prod
+        if (!["d", "h", "m", "s"].some((unit) => interval.endsWith(unit))) {
+            console.log("invalid interval!");
             return;
         }
 
         const store = await load("settings.json", { autoSave: false });
 
         await store.set("jsonPath", jsonPath);
+        await store.set("interval", interval);
+
         await store.save();
 
-        console.log("saved!");
+        // console.log("saved!");
+        await getCurrentWindow().close();
     }
 
     async function handleClose() {
@@ -54,26 +66,12 @@
 
             <label class="flex flex-col gap-2">
                 <span class="text-sm font-semibold opacity-75">Interval</span>
-                <div class="flex gap-2">
-                    <input
-                        type="number"
-                        class="p-2 border rounded-md border-white/25 w-full"
-                        placeholder="24"
-                    />
-
-                    <select
-                        class="p-2 border rounded-md border-white/25 w-[40%]"
-                    >
-                        <option class="bg-black/85" value="minutes"
-                            >Minutes</option
-                        >
-                        <option class="bg-black/85" value="hours">Hours</option>
-                        <option class="bg-black/85" value="days">Days</option>
-                        <option class="bg-black/85" value="months"
-                            >Months</option
-                        >
-                    </select>
-                </div>
+                <input
+                    type="text"
+                    class="p-2 border rounded-md border-white/25 w-full"
+                    placeholder="24"
+                    bind:value={interval}
+                />
             </label>
 
             <label class="flex items-center gap-2">

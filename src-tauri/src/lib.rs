@@ -13,6 +13,7 @@ fn greet(name: &str) -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_fs::init())
         .setup(|app| {
@@ -79,8 +80,7 @@ pub fn run() {
                             }
                         }
                     }
-                    _ => {
-                    }
+                    _ => {}
                 })
                 .icon(app.default_window_icon().unwrap().clone())
                 .build(app)
