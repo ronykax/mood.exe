@@ -1,3 +1,5 @@
+import { load } from "@tauri-apps/plugin-store";
+
 export function getMoodImages(): string[] {
     const moods = ["sad", "neutral", "happy"] as const;
     const assets = import.meta.glob("/src/assets/moods/*.{png,gif}", {
@@ -43,4 +45,13 @@ export function convertIntervalToMs(interval: string) {
         default:
             return 0;
     }
+}
+
+export async function loadSettings() {
+    const store = await load("settings.json", { autoSave: false });
+
+    const jsonPath = await store.get("jsonPath");
+    const interval = await store.get("interval");
+
+    return { jsonPath, interval };
 }

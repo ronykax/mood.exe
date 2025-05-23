@@ -1,5 +1,10 @@
 <script lang="ts">
-    import { convertIntervalToMs, getMoodImages, getMoodName } from "$lib";
+    import {
+        convertIntervalToMs,
+        getMoodImages,
+        getMoodName,
+        loadSettings,
+    } from "$lib";
     import { submitEntry } from "$lib/submit-entry";
     import { getCurrentWindow } from "@tauri-apps/api/window";
     import { onMount } from "svelte";
@@ -77,12 +82,12 @@
             return;
         }
 
-        const store = await load("settings.json", { autoSave: false });
-        const interval = await store.get("interval");
+        const settings = await loadSettings();
+        const interval = settings.interval as string;
 
         console.log(interval);
 
-        const ms = convertIntervalToMs(interval as string);
+        const ms = convertIntervalToMs(interval);
 
         setInterval(() => {
             sendNotification({
